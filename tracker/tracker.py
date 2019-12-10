@@ -4,9 +4,20 @@ This is a time tracker
 Brandon Spicer
 12/04/19
 '''
-from datetime import datetime, timedelta
-from collections import OrderedDict
 import os
+from datetime import datetime 
+from datetime import date
+from datetime import timedelta
+from collections import OrderedDict
+
+# initialize datetime variables
+today = datetime.today()
+bday = date(1996, 6, 11)
+day = (date.today() - bday).days
+month = (day + 1) // 28
+week = (day + 1) // 7
+weekday = today.strftime('%A')
+date = today.strftime('%m/%d/%Y')
 
 # prompt user to initialize
 print('Time Tracker')
@@ -14,12 +25,11 @@ print()
 input('Press ENTER to start.')
 print()
 
-today = datetime.today()
 
 # initialize dictionary to hold task info
 task_dict = OrderedDict() 
 
-# timer loop
+# timer loop (ctrl + C to exit loop)
 try:
 	while (True):
 		# prompt user to start new task
@@ -34,31 +44,20 @@ try:
 		# record task info
 		task_dict[task_start] = (task_name, task_time)
 		
-		# test
-		print(task_dict)
-
 except KeyboardInterrupt:
 	print('\nGoodbye.')
 
-# timer loop is done. now process the data
-
-filename = f'{today.month}-{today.day}-{today.year}'
-
+# name output file with today's date
+filename = f'/Users/brandon/brain/plan/{month}/{week}/{weekday}/log'
 for start, task in task_dict.items():
-	# task_start task_name task_time
-	
-	# first format the variables nicely
-	start_string = f'{start.hour}:{start.minute}'
+	# format the variables nicely
+	start_string = today.strftime('%H:%M') 
 	name_string = str(task[0])
-
 	s = task[1].seconds 
 	time_string = f'{s // 3600} hr {(s % 3600) // 60} min'
 
-	# add a line to the output file
 
-	# first check if file exists 
-	# if it doesn't exist, create it
-	# if it does exist append to it
+	# create file if doesn't exist and append a line with task data 
 	with open(filename, 'a') as f:
 		f.write(f'{start_string} {name_string} {time_string}\n')
 		
